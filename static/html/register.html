@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>用户注册</title>
+  <link rel="shortcut icon" href="/static/imag/favicon.ico" type="image/x-icon" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: url("/static/imag/gate.jpg") no-repeat;
+      background-size: cover;
+      background-position: 50% 50%;
+    }
+
+
+    .Box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 650px;
+      height: 400px;
+      display: flex;
+    }
+
+    .left {
+      position: relative;
+      width: 45%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      background-size: cover;
+    }
+
+    .right {
+      position: relative;
+      opacity: 95%;
+      width: 55%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    .centerBox {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      text-align: center;
+    }
+
+    .left img {
+      width: 110px;
+      height: 110px;
+      margin-bottom: 5px;
+    }
+
+    .left p {
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .left h4 {
+      font-size: 18px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .right form {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      text-align: center;
+    }
+
+    h3 {
+      margin-bottom: 20px;
+      color: #5f89ca;
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      border: 1px solid #5f89ca;
+      background-color: transparent;
+      padding-left: 10px;
+      font-size: 12px;
+      color: #000000;
+      margin-bottom: 15px;
+      outline: none;
+    }
+
+    .loginBtn {
+      width: 100%;
+      height: 35px;
+      line-height: 32px;
+      text-align: center;
+      font-size: 15px;
+      color: #fff;
+      background: #5f89ca;
+      outline: none;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .loginBtn:hover {
+      cursor: pointer;
+      background-color: deepskyblue;
+    }
+
+    .no {
+      cursor: pointer;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #828282;
+    }
+
+    .yzmBox {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .yzmBox input {
+      width: 70%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .yzmBox .btn {
+      cursor: pointer;
+      width: 29%;
+      background-color: #5f89ca;
+      color: #ffffff;
+      height: 30px;
+      outline: none;
+      border: 1px solid #5f89ca;
+      font-size: 12px;
+      margin-left: 1%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="Box">
+    <div class="left">
+      <div class="centerBox">
+        <img src="/static/imag/logo.gif" alt="">
+        <h4>聊天室_test</h4>
+        <p>用户注册</p>
+      </div>
+    </div>
+    <div class="right">
+      <form action="/register" method="post">
+        <h3>新用户注册</h3>
+        <input type="text" name="username" placeholder="请输入用户名" required>
+        <input type="password" name="passwd1" placeholder="请输入密码" required>
+        <input type="password" name="passwd2" placeholder="请再次输入密码" required>
+        <input type="password" name="invite_code" placeholder="请输入内部邀请码" required>
+        <input type="submit" class="loginBtn" value="注册">
+        <p class="no">已有账号？<a href="/login">去登陆</a></p>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

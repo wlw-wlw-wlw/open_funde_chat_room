@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ai聊天室</title>
+  <link rel="shortcut icon" href="/static/imag/favicon.ico" type="image/x-icon" />
+
+  <style>
+    :root {
+      --body-bg-color: #f7f2e0;
+      /* 暖色背景 */
+      --text-color: #333;
+      /* 文字颜色 */
+      --container-bg-color: #282c34;
+      /* 科技感背景 */
+      --sidebar-bg-color: #383e4b;
+      /* 侧边栏背景颜色 */
+      --sidebar-heading-color: #ffbe76;
+      /* 侧边栏标题颜色 */
+      --header-bg-color: #ffbe76;
+      /* 头部背景颜色 */
+      --notification-bg-color: #444f61;
+      /* 通知中心背景颜色 */
+      --notification-item-bg-color: #383e4b;
+      /* 通知项背景颜色 */
+      --notification-item-system-text-color: #ff6b6b;
+      /* 通知项system文字颜色 */
+      --notification-item-user-text-color: #ffffff;
+      /* 通知项user文字颜色 */
+      --button-bg-color: #ffbe76;
+      /* 按钮背景颜色 */
+      --footer-bg-color: #383e4b;
+      /* 底部背景颜色 */
+      --footer-text-color: #fff;
+      /* 底部文本颜色 */
+      --notification-list-bg-color: #006dff;
+    }
+
+    /* 全局样式 */
+    html {
+      height: 100vh;
+      width: 100vw;
+      min-width: 500px;
+      min-height: 150px;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--body-bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      min-width: 500px;
+      min-height: 150px;
+    }
+
+    /* 页面布局 */
+    .container {
+      display: flex;
+      flex: 1;
+      background-color: var(--container-bg-color);
+      color: #fff;
+    }
+
+    .sidebar {
+      width: 10vw;
+      background-color: var(--sidebar-bg-color);
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+      color: var(--sidebar-heading-color);
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 10px 0;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: var(--sidebar-heading-color);
+      color: var(--text-color);
+    }
+
+    .main-content {
+      margin-left: 2vw;
+      /* justify-content: center; */
+      flex: 1;
+      padding: 20px;
+      /* max-width: 89vw; */
+      max-width: 80vw;
+    }
+
+    .header {
+      background-color: var(--header-bg-color);
+      padding: 10px 20px;
+      color: var(--text-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .header .user-info {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .header .user-info .invite-code-popup {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background-color: var(--sidebar-bg-color);
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      color: #fff;
+    }
+
+    .header .user-info img:hover+.invite-code-popup {
+      display: block;
+    }
+
+    .header .user-info .username {
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+
+    .header .user-info .logout-button {
+      padding: 5px 10px;
+      background-color: #ff6b6b;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: var(--footer-text-color);
+    }
+
+    .header .user-info .logout-button:hover {
+      background-color: #ff4757;
+    }
+
+    .notification-center {
+      /* justify-content: center; */
+      margin-top: 20px;
+      padding: 20px;
+      background-color: var(--notification-bg-color);
+      border-radius: 8px;
+    }
+
+    .notification-center h2 {
+      font-size: 1.2em;
+      /* 缩小字号 */
+      display: inline-block;
+      /* 使背景仅在文字上 */
+      background-color: #28a745;
+      /* 鲜绿色背景 */
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .notification-list {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: var(--notification-list-bg-color);
+      color: #fff;
+      min-height: 50vh;
+
+    }
+
+    .notification-item {
+      margin: 10px 0;
+      padding: 10px;
+      padding-top: 16px;
+      background-color: var(--notification-item-bg-color);
+      border-radius: 5px;
+      /* color: var(--notification-item-system-text-color); */
+      /* display: flex; */
+      justify-content: space-between;
+      align-items: center;
+      word-wrap: break-word;
+      position: relative;
+    }
+
+    .notification-item .timestamp {
+      font-size: 0.7em;
+      /* 时间显示字体大小 */
+      color: #ccc;
+      /* 时间显示颜色 */
+      margin-left: 10px;
+      /* 时间显示位置 */
+      position: absolute;
+      left: 3px;
+      top: 2px;
+    }
+
+    /* 按钮样式 */
+    .send-message {
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+      /* 扩大聊天框区域 */
+    }
+
+    .send-message #message-input {
+      width: 70%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 10px;
+    }
+
+    .send-message #send-button {
+      padding: 10px 20px;
+      background-color: var(--button-bg-color);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .send-message #send-button:hover {
+      background-color: #ff9a5a;
+    }
+
+    /* LOGO 图片 */
+    .header .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 20px;
+    }
+
+    /* 底部版权信息 */
+    .footer {
+      text-align: center;
+      padding: 10px;
+      background-color: var(--footer-bg-color);
+      color: var(--footer-text-color);
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body onunload="msg_init()">
+  <div class="container">
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+      <h2>导航栏</h2>
+      <a href="#" onclick="go_back()">返回首页</a>
+      <a href="#" onclick="open_msg()">聊天室</a>
+      <a href="#" onclick="open_ai_chat()">ai聊天</a>
+      <a href="#">朋友圈</a>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+      <div class="header">
+        <img src="./static/imag/logo.gif" alt="Logo" class="logo" title="点击切换主题" id="logo_switchTheme">
+        <h1>ai聊天室</h1>
+        <div class="user-info">
+          <img src="./static/imag/adm.gif" alt="User Avatar">
+          <div class="invite-code-popup">
+            用户: <span id="uname">{{.username}}</span>
+            <br>邀请码: {{.invitecode}}(禁止外传)
+          </div>
+          <div class="username">用户: {{.username}}</div>
+          <button class="logout-button" onclick="logout()">退出登录</button>
+        </div>
+      </div>
+
+      <div class="notification-center">
+        <h2 id="net_status">网络已连接</h2>
+        <div class="notification-list" id="messages">
+           {{range .history_msg}}
+            {{if eq .Name "ai"}}
+              <div class="notification-item" style="color:var(--notification-item-system-text-color);">
+            {{else}}
+              <div class="notification-item" style="color:var(--notification-item-user-text-color);">
+            {{end}}
+            {{.Name}}: {{.Msg}}
+            <span class="timestamp">{{.Time}}</span>
+            </div>
+            {{end}}
+          </div>
+        </div>
+
+        <!-- 输入框和发送按钮 -->
+        <form class="send-message" id="message_form">
+          <input type="text" placeholder="输入消息..." id="message-input">
+          <input type="submit" value="发送" id="send-button">
+        </form>
+      </div>
+    </div>
+
+    <!-- 底部版权信息 -->
+    <div class="footer">
+      猫meme聊天室 Copyright@wlw
+    </div>
+    <script src="/static/js/route.js"></script>
+    <script src="/static/js/ai_chat.js"></script>
+</body>
+
+</html>
