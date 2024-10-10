@@ -10,31 +10,24 @@ get_msg = function () {
 
           // data.msgs[i].time = data.msgs[i].time.split(".")[0];
           data.msgs[i].time = String(data.msgs[i].time).match(/[^:]*:[^:]*/);
-          if (data.msgs[i].username == "system") {
-            document.getElementById('messages').innerHTML += `
-                              <div class="notification-item" style="color:var(--notification-item-system-text-color);">
-                                  ${data.msgs[i].username}:${data.msgs[i].message}
-                                  <span class="timestamp">${data.msgs[i].time}</span>
-                                  </div>`;
-          } else {
-            document.getElementById('messages').innerHTML += `
+          document.getElementById('messages').innerHTML += `
                               <div class="notification-item" style="color:var(--notification-item-user-text-color);">
                                   ${data.msgs[i].username}:${data.msgs[i].message}
                                   <span class="timestamp">${data.msgs[i].time}</span>
                                   </div>`;
-          }
+
         }
       } else {
         alert("获取失败，请重试")
       }
-      var m=document.getElementById("messages");
-      m.scrollTop=m.scrollHeight;
+      var m = document.getElementById("messages");
+      m.scrollTop = m.scrollHeight;
     });
 }
 function sendMessage() {
   const message = document.getElementById('message-input').value;
   if (message) {
-    uname=document.getElementById("uname").innerText;
+    uname = document.getElementById("uname").innerText;
     console.log(uname)
     fetch('/send_msg', {
       method: 'POST',
@@ -69,25 +62,15 @@ const socket = new WebSocket("ws://" + host + "/ws_receive_msg");
 socket.onmessage = function (event) {
   const message = event.data;
   var data = JSON.parse(message);
-  
+
   data.time = String(data.time).match(/[^:]*:[^:]*/);
-  if (data.username == "system") {
-    document.getElementById('messages').innerHTML += `
-      <div class="notification-item" style="color:var(--notification-item-system-text-color);">
-        ${data.username}:${data.message}
-        <span class="timestamp">${data.time}</span>
-        </div>`
-    var audio = document.getElementById("alarm");
-    audio.play();
-  } else {
-    document.getElementById('messages').innerHTML += `
+  document.getElementById('messages').innerHTML += `
       <div class="notification-item" style="color:var(--notification-item-user-text-color);">
         ${data.username}:${data.message}
         <span class="timestamp">${data.time}</span>
         </div>`;
-  }
-  var m=document.getElementById("messages");
-  m.scrollTop=m.scrollHeight;
+  var m = document.getElementById("messages");
+  m.scrollTop = m.scrollHeight;
 };
 
 socket.onerror = function (error) {
